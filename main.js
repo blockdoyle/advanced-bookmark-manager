@@ -1,5 +1,5 @@
 // imports
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain, Notification } = require("electron");
 const path = require("path");
 
 // window options
@@ -9,6 +9,7 @@ const loadMainWindow = () => {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -30,4 +31,9 @@ app.on("active", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     loadMainWindow();
   }
+});
+
+// handle notification
+ipcMain.handle("show-notification", (event, message) => {
+  new Notification({ title: "Notification", body: message }).show();
 });
